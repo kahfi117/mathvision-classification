@@ -1,0 +1,17 @@
+name: Test Colab Runner
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Test Python
+        run: |
+          python -c "print('Hello from Colab GPU Runner 🚀')"
