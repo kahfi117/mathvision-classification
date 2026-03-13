@@ -1,0 +1,28 @@
+name: Train Model
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  train:
+    runs-on: self-hosted
+
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Check Python
+        run: python --version
+
+      - name: Check GPU
+        run: nvidia-smi
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run training pipeline
+        run: python src/train.py
