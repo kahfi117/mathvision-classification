@@ -7,7 +7,7 @@ on:
 
 jobs:
   train:
-    runs-on: [self-hosted, linux, x64, classifier-gpu]
+    runs-on: [self-hosted, linux, x64, classifier]
     timeout-minutes: 4320
 
     steps:
