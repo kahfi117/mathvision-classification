@@ -17,16 +17,13 @@ jobs:
           python --version
           nvidia-smi || true
 
-      - name: Create venv
+      - name: Install dependencies
         run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip || true
           pip install -r requirements.txt
 
       - name: Run training
         run: |
-          . .venv/bin/activate
           mkdir -p logs outputs/checkpoints
           cd src
           python train.py | tee ../logs/blip2_training.log
