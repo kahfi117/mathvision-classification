@@ -4,7 +4,7 @@ data:
   train_path: data/split/train.parquet
   val_path: data/split/val.parquet
   test_path: data/split/test.parquet
-  output_dir: outputs/checkpoints
+  output_dir: /content/drive/MyDrive/UGM S2/#TESIS/PROGRAM/FINAL SEKALIAMI INI/checkpoint_model/
   log_dir: logs
 
 training:

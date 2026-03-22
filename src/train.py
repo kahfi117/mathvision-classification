@@ -69,6 +69,8 @@ def train_pipeline(config_path="../config/blip2_config.yaml"):
             history = {"train_loss": [], "train_acc": [], "val_loss": [], "val_acc": []}
             best_val_loss = float("inf")
             best_val_acc = 0
+            patience = 4
+            patience_counter = 0
 
             # Mode setup
             if scenario == 'Normal':
@@ -157,13 +159,21 @@ def train_pipeline(config_path="../config/blip2_config.yaml"):
                 # Save best models
                 if val_loss_epoch < best_val_loss:
                     best_val_loss = val_loss_epoch
+                    patience_counter = 0
                     torch.save(model.state_dict(), os.path.join(SAVE_DIR, f"best_model_{scenario}_lr{lr}_loss.pth"))
                     print("Best loss model saved!")
+                else:
+                    patience_counter += 1
+                    print(f"EarlyStopping counter: {patience_counter} out of {patience}")
 
                 if val_acc_epoch > best_val_acc:
                     best_val_acc = val_acc_epoch
                     torch.save(model.state_dict(), os.path.join(SAVE_DIR, f"best_model_{scenario}_lr{lr}_acc.pth"))
                     print("Best accuracy model saved!")
+                    
+                if patience_counter >= patience:
+                    print("Early stopping triggered. Stopping training for this LR/Scenario.")
+                    break
 
             final_logs[scenario][f"lr_{lr}"] = history
 

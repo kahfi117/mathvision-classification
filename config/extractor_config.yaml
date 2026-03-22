@@ -1,4 +1,4 @@
-run_name: fusion_modular
+run_name: feature_extractor_modular
 
 data:
   train_path: data/split/train.parquet
@@ -9,6 +9,7 @@ data:
 
 training:
   batch_size: 16
+  mlp_batch_size: 64
   epochs: 10
   learning_rates: [0.0001, 0.00005, 0.00001]
   scenarios: ["Normal", "Augmentasi", "SMOTE", "Aug_SMOTE"]
@@ -16,7 +17,6 @@ training:
   num_workers: 2
 
 model:
-  name: fusion_modular
   pretrained_name: Salesforce/blip2-opt-2.7b
   blip2_hidden: 1408
   cnn_hidden: 128
