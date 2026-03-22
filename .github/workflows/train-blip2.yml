@@ -1,0 +1,41 @@
+name: Train BLIP-2 Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: [self-hosted, linux, x64, gpu]
+    timeout-minutes: 4320
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Show environment
+        run: |
+          python --version
+          nvidia-smi || true
+
+      - name: Create venv
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run training
+        run: |
+          . .venv/bin/activate
+          mkdir -p logs outputs/checkpoints
+          cd src
+          python train.py | tee ../logs/blip2_training.log
+
+      - name: Upload logs and outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: blip2-training-results
+          path: |
+            logs/
+            outputs/
+          retention-days: 30

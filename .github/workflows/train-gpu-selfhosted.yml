@@ -1,0 +1,40 @@
+name: Train GPU Self-Hosted
+
+on:
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: [self-hosted, linux, x64, gpu]
+    timeout-minutes: 4320
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Show environment
+        run: |
+          python --version
+          nvidia-smi || true
+
+      - name: Create venv
+        run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run training
+        run: |
+          . .venv/bin/activate
+          mkdir -p logs outputs
+          python -m src.train --config configs/blip_baseline.yaml | tee logs/actions_console.log
+
+      - name: Upload logs and outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: training-results-gpu
+          path: |
+            logs/
+            outputs/
+          retention-days: 30

@@ -1,0 +1,29 @@
+run_name: parallel_cnn
+
+data:
+  train_path: data/splits/train.parquet
+  val_path: data/splits/val.parquet
+  test_path: data/splits/test.parquet
+
+training:
+  batch_size: 32
+  epochs: 30
+  learning_rates: [0.0001, 0.00005, 0.00001]
+  scenarios: ["Normal", "Augmentasi", "SMOTE", "Aug_SMOTE"]
+  seed: 42
+  num_workers: 2
+
+model:
+  name: parallel_cnn
+  in_channels: 3
+  num_classes: null
+  branch_kernels: [5, 7]
+  base_channels: 32
+  dropout: 0.3
+  image_size: 224
+
+output:
+  root_dir: outputs
+  save_confusion_matrix: true
+  save_classification_report: true
+  save_history_json: true
