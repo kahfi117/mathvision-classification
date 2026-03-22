@@ -1,0 +1,38 @@
+name: Train Fusion CNN-BLIP2
+
+on:
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: [self-hosted, linux, x64, fusion-gpu]
+    timeout-minutes: 4320
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Show environment
+        run: |
+          python --version
+          nvidia-smi || true
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip || true
+          pip install -r requirements.txt
+
+      - name: Run training
+        run: |
+          mkdir -p logs outputs/checkpoints
+          cd src
+          python train_fusion.py | tee ../logs/fusion_training.log
+
+      - name: Upload logs and outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: fusion-training-results
+          path: |
+            logs/
+            outputs/
+          retention-days: 30

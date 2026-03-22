@@ -1,0 +1,24 @@
+run_name: fusion_modular
+
+data:
+  train_path: data/split/train.parquet
+  val_path: data/split/val.parquet
+  test_path: data/split/test.parquet
+  output_dir: outputs/checkpoints
+  log_dir: logs
+
+training:
+  batch_size: 16
+  epochs: 10
+  learning_rates: [0.0001, 0.00005, 0.00001]
+  scenarios: ["Normal", "Augmentasi", "SMOTE", "Aug_SMOTE"]
+  seed: 42
+  num_workers: 2
+
+model:
+  name: fusion_modular
+  pretrained_name: Salesforce/blip2-opt-2.7b
+  blip2_hidden: 1408
+  cnn_hidden: 128
+  hidden_dim: 256
+  dropout: 0.3
