@@ -1,7 +1,9 @@
 name: Train Fusion CNN-BLIP2
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - fusion-mlp
 
 jobs:
   train:
